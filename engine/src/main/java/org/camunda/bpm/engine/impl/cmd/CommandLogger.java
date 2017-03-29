@@ -220,7 +220,7 @@ public class CommandLogger extends ProcessEngineLogger {
         ));
   }
 
-  public void warnDeploymentResourceHasWroneName(String resourceName, String[] suffixes) {
+  public void warnDeploymentResourceHasWrongName(String resourceName, String[] suffixes) {
     logWarn(
         "035",
         String.format("Deployment resource '%s' will be ignored as its name must have one of suffixes %s.",

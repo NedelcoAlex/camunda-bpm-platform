@@ -200,6 +200,7 @@ import org.camunda.bpm.engine.impl.jobexecutor.TimerStartEventJobHandler;
 import org.camunda.bpm.engine.impl.jobexecutor.TimerStartEventSubprocessJobHandler;
 import org.camunda.bpm.engine.impl.jobexecutor.TimerSuspendJobDefinitionHandler;
 import org.camunda.bpm.engine.impl.jobexecutor.TimerSuspendProcessDefinitionHandler;
+import org.camunda.bpm.engine.impl.jobexecutor.historycleanup.HistoryCleanupJobHandler;
 import org.camunda.bpm.engine.impl.metrics.MetricsRegistry;
 import org.camunda.bpm.engine.impl.metrics.MetricsReporterIdProvider;
 import org.camunda.bpm.engine.impl.metrics.SimpleIpBasedProvider;
@@ -1544,6 +1545,9 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
     BatchMonitorJobHandler batchMonitorJobHandler = new BatchMonitorJobHandler();
     jobHandlers.put(batchMonitorJobHandler.getType(), batchMonitorJobHandler);
+
+    HistoryCleanupJobHandler historyCleanupJobHandler = new HistoryCleanupJobHandler();
+    jobHandlers.put(historyCleanupJobHandler.getType(), historyCleanupJobHandler);
 
     for (JobHandler batchHandler : batchHandlers.values()) {
       jobHandlers.put(batchHandler.getType(), batchHandler);

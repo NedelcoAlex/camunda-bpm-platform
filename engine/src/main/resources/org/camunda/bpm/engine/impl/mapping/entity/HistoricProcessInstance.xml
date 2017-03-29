@@ -374,6 +374,56 @@
         </if>
     </select>
 
+    <!-- H2 or MSSQL -->
+    <select id="selectHistoricProcessInstanceIdsForCleanup" parameterType="java.util.Map" resultType="string">
+        ${limitBefore}
+        SELECT pi.PROC_INST_ID_
+        FROM ${prefix}ACT_HI_PROCINST pi, ${prefix}ACT_RE_PROCDEF pd
+        where
+          pi.PROC_DEF_ID_ = pd.ID_
+          AND not pi.END_TIME_ is NULL
+          AND not pd.TTL_ is NULL
+          <include refid="selectHistoricProcessInstanceIdsByTTLSql"/>
+        <include refid="orderByHistoricProcessIdsForCleanupSql"/>
+        ${limitAfter}
+    </select>
+
+    <sql id="selectHistoricProcessInstanceIdsByTTLSql">
+      AND DATEDIFF(day, pi.END_TIME_, #{parameter}) &gt;= pd.TTL_
+    </sql>
+
+    <sql id="orderByHistoricProcessIdsForCleanupSql">
+      ORDER BY DATEDIFF(day, pi.END_TIME_, #{parameter}) DESC
+    </sql>
+
+    <sql id="selectHistoricProcessInstanceIdsByTTLSql_db2">
+      AND pi.END_TIME_ + pd.TTL_ DAYS &lt; #{parameter}
+    </sql>
+
+    <sql id="orderByHistoricProcessIdsForCleanupSql_db2">
+      ORDER BY #{parameter} - pi.END_TIME_ DESC
+    </sql>
+
+    <sql id="selectHistoricProcessInstanceIdsByTTLSql_oracle">
+        AND pi.END_TIME_ + pd.TTL_ &lt; #{parameter}
+    </sql>
+
+    <sql id="orderByHistoricProcessIdsForCleanupSql_db2_or_oracle_or_postgres">
+        ORDER BY #{parameter} - pi.END_TIME_ DESC
+    </sql>
+
+    <sql id="selectHistoricProcessInstanceIdsByTTLSql_mysql">
+        AND DATEDIFF(#{parameter}, pi.END_TIME_) &gt;= pd.TTL_
+    </sql>
+
+    <sql id="orderByHistoricProcessIdsForCleanupSql_mysql">
+        ORDER BY DATEDIFF(#{parameter}, pi.END_TIME_) DESC
+    </sql>
+
+    <sql id="selectHistoricProcessInstanceIdsByTTLSql_postgres">
+        AND extract (day from #{parameter} - pi.END_TIME_) &gt; pd.TTL_
+    </sql>
+
     <select id="selectHistoricProcessInstanceByNativeQuery_mssql_or_db2" parameterType="java.util.Map"
             resultMap="historicProcessInstanceResultMap">
         <if test="resultType == 'LIST_PAGE'">

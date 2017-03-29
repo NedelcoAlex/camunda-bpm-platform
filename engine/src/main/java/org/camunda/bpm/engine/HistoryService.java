@@ -14,7 +14,6 @@
 
 package org.camunda.bpm.engine;
 
-import org.camunda.bpm.engine.authorization.Groups;
 import org.camunda.bpm.engine.authorization.Permissions;
 import org.camunda.bpm.engine.authorization.Resources;
 import org.camunda.bpm.engine.batch.Batch;
@@ -145,7 +144,7 @@ public interface HistoryService {
    * historic details (variable updates, form properties) are deleted as well.
    *
    * @throws BadUserRequestException
-   *          when no process instances is found with the given ids or ids are null.
+   *          when no process instances are found with the given ids or ids are null.
    * @throws AuthorizationException
    *          If the user has no {@link Permissions#DELETE_HISTORY} permission on {@link Resources#PROCESS_DEFINITION}.
    */
@@ -157,11 +156,21 @@ public interface HistoryService {
    * @param processInstanceIds list of process instance ids for removal
    *
    * @throws BadUserRequestException
-   *          when no process instances is found with the given ids or ids are null or when some of the process instances are not finished yet
+   *          when no process instances are found with the given ids or ids are null or when some of the process instances are not finished yet
    * @throws AuthorizationException
    *          If the user has no {@link Permissions#DELETE_HISTORY} permission on {@link Resources#PROCESS_DEFINITION}.
    */
   void deleteHistoricProcessInstancesBulk(List<String> processInstanceIds);
+
+  /**
+   * Deletes historic process instances and all related historic data in bulk manner.
+   *
+   * @throws BadUserRequestException
+   *          when no process instances is found with the given ids or ids are null or when some of the process instances are not finished yet
+   * @throws AuthorizationException
+   *          If the user has no {@link Permissions#DELETE_HISTORY} permission on {@link Resources#PROCESS_DEFINITION}.
+   */
+  String cleanUpHistoryAsync();
 
   /**
    * Deletes historic process instances asynchronously. All historic activities, historic task and
