@@ -374,7 +374,7 @@
         </if>
     </select>
 
-    <sql id="selectHistoricProcessInstanceIdsByForCleanupSql">
+    <sql id="selectHistoricProcessInstanceIdsForCleanupSql">
         SELECT pi.PROC_INST_ID_
         FROM ${prefix}ACT_HI_PROCINST pi, ${prefix}ACT_RE_PROCDEF pd
         where
@@ -383,41 +383,51 @@
         AND not pd.TTL_ is NULL
     </sql>
 
-    <select id="selectHistoricProcessInstanceIdsForCleanup" parameterType="java.util.Map" resultType="string">
+    <select id="selectHistoricProcessInstanceIdsForCleanup" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
         ${limitBefore}
-        <include refid="selectHistoricProcessInstanceIdsByForCleanupSql"/>
+        <include refid="selectHistoricProcessInstanceIdsForCleanupSql"/>
         AND DATEDIFF(day, pi.END_TIME_, #{parameter}) &gt;= pd.TTL_
         ORDER BY DATEDIFF(day, pi.END_TIME_, #{parameter}) DESC
         ${limitAfter}
     </select>
 
-    <select id="selectHistoricProcessInstanceIdsForCleanup_db2" parameterType="java.util.Map" resultType="string">
-        ${limitBefore}
-        <include refid="selectHistoricProcessInstanceIdsByForCleanupSql"/>
-        AND pi.END_TIME_ + pd.TTL_ DAYS &lt; #{parameter}
-        ORDER BY #{parameter} - pi.END_TIME_ DESC
-        ${limitAfter}
+    <select id="selectHistoricProcessInstanceIdsForCleanup_mssql" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+        SELECT TOP (#{maxResults}) pi.PROC_INST_ID_
+        FROM ${prefix}ACT_HI_PROCINST pi, ${prefix}ACT_RE_PROCDEF pd
+        where
+        pi.PROC_DEF_ID_ = pd.ID_
+        AND not pi.END_TIME_ is NULL
+        AND not pd.TTL_ is NULL
+        AND DATEDIFF(day, pi.END_TIME_, #{parameter}) &gt;= pd.TTL_
+        ORDER BY DATEDIFF(day, pi.END_TIME_, #{parameter}) DESC
     </select>
 
-    <select id="selectHistoricProcessInstanceIdsForCleanup_oracle" parameterType="java.util.Map" resultType="string">
+    <select id="selectHistoricProcessInstanceIdsForCleanup_db2" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
+        <include refid="selectHistoricProcessInstanceIdsForCleanupSql"/>
+        AND pi.END_TIME_ + pd.TTL_ DAYS &lt; #{parameter}
+        ORDER BY #{parameter} - pi.END_TIME_ DESC
+        FETCH FIRST #{maxResults} ROWS ONLY
+    </select>
+
+    <select id="selectHistoricProcessInstanceIdsForCleanup_oracle" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
         ${limitBefore}
-        <include refid="selectHistoricProcessInstanceIdsByForCleanupSql"/>
+        <include refid="selectHistoricProcessInstanceIdsForCleanupSql"/>
         AND pi.END_TIME_ + pd.TTL_ &lt; #{parameter}
         ORDER BY #{parameter} - pi.END_TIME_ DESC
         ${limitAfter}
     </select>
 
-    <select id="selectHistoricProcessInstanceIdsForCleanup_postgres" parameterType="java.util.Map" resultType="string">
+    <select id="selectHistoricProcessInstanceIdsForCleanup_postgres" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
         ${limitBefore}
-        <include refid="selectHistoricProcessInstanceIdsByForCleanupSql"/>
+        <include refid="selectHistoricProcessInstanceIdsForCleanupSql"/>
         AND extract (day from #{parameter} - pi.END_TIME_) &gt; pd.TTL_
         ORDER BY #{parameter} - pi.END_TIME_ DESC
         ${limitAfter}
     </select>
 
-    <select id="selectHistoricProcessInstanceIdsForCleanup_mysql" parameterType="java.util.Map" resultType="string">
+    <select id="selectHistoricProcessInstanceIdsForCleanup_mysql" parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject" resultType="string">
         ${limitBefore}
-        <include refid="selectHistoricProcessInstanceIdsByForCleanupSql"/>
+        <include refid="selectHistoricProcessInstanceIdsForCleanupSql"/>
         AND DATEDIFF(#{parameter}, pi.END_TIME_) &gt;= pd.TTL_
         ORDER BY DATEDIFF(#{parameter}, pi.END_TIME_) DESC
         ${limitAfter}
