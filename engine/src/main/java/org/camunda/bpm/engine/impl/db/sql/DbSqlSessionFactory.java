@@ -135,8 +135,7 @@ public class DbSqlSessionFactory implements SessionFactory {
       addDatabaseSpecificStatement(mysqlLikeDatabase, "selectProcessDefinitionCountByQueryCriteria", "selectProcessDefinitionCountByQueryCriteria_mysql");
       addDatabaseSpecificStatement(mysqlLikeDatabase, "selectDeploymentsByQueryCriteria", "selectDeploymentsByQueryCriteria_mysql");
       addDatabaseSpecificStatement(mysqlLikeDatabase, "selectDeploymentCountByQueryCriteria", "selectDeploymentCountByQueryCriteria_mysql");
-      addDatabaseSpecificStatement(mysqlLikeDatabase, "selectHistoricProcessInstanceIdsByTTLSql", "selectHistoricProcessInstanceIdsByTTLSql_mysql");
-      addDatabaseSpecificStatement(mysqlLikeDatabase, "orderByHistoricProcessIdsForCleanupSql", "orderByHistoricProcessIdsForCleanupSql_mysql");
+      addDatabaseSpecificStatement(mysqlLikeDatabase, "selectHistoricProcessInstanceIdsForCleanup", "selectHistoricProcessInstanceIdsForCleanup_mysql");
 
       constants = new HashMap<String, String>();
       constants.put("constant.event", "'event'");
@@ -192,8 +191,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     addDatabaseSpecificStatement(POSTGRES, "selectHistoricVariableInstanceByQueryCriteria", "selectHistoricVariableInstanceByQueryCriteria_postgres");
     addDatabaseSpecificStatement(POSTGRES, "selectFilterByQueryCriteria", "selectFilterByQueryCriteria_postgres");
     addDatabaseSpecificStatement(POSTGRES, "selectFilter", "selectFilter_postgres");
-    addDatabaseSpecificStatement(POSTGRES, "selectHistoricProcessInstanceIdsByTTLSql", "selectHistoricProcessInstanceIdsByTTLSql_postgres");
-    addDatabaseSpecificStatement(POSTGRES, "orderByHistoricProcessIdsForCleanupSql", "orderByHistoricProcessIdsForCleanupSql_db2_or_oracle_or_postgres");
+    addDatabaseSpecificStatement(POSTGRES, "selectHistoricProcessInstanceIdsForCleanup", "selectHistoricProcessInstanceIdsForCleanup_postgres");
 
     constants = new HashMap<String, String>();
     constants.put("constant.event", "'event'");
@@ -230,8 +228,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     addDatabaseSpecificStatement(ORACLE, "selectHistoricTaskInstanceDurationReport", "selectHistoricTaskInstanceDurationReport_oracle");
     addDatabaseSpecificStatement(ORACLE, "selectHistoricTaskInstanceCountByTaskNameReport", "selectHistoricTaskInstanceCountByTaskNameReport_oracle");
     addDatabaseSpecificStatement(ORACLE, "selectFilterByQueryCriteria", "selectFilterByQueryCriteria_oracleDb2");
-    addDatabaseSpecificStatement(ORACLE, "selectHistoricProcessInstanceIdsByTTLSql", "selectHistoricProcessInstanceIdsByTTLSql_oracle");
-    addDatabaseSpecificStatement(ORACLE, "orderByHistoricProcessIdsForCleanupSql", "orderByHistoricProcessIdsForCleanupSql_db2_or_oracle_or_postgres");
+    addDatabaseSpecificStatement(ORACLE, "selectHistoricProcessInstanceIdsForCleanup", "selectHistoricProcessInstanceIdsForCleanup_oracle");
 
     constants = new HashMap<String, String>();
     constants.put("constant.event", "cast('event' as nvarchar2(255))");
@@ -275,8 +272,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     addDatabaseSpecificStatement(DB2, "selectUserByNativeQuery", "selectUserByNativeQuery_mssql_or_db2");
     addDatabaseSpecificStatement(DB2, "selectHistoricDecisionInstancesByNativeQuery", "selectHistoricDecisionInstancesByNativeQuery_mssql_or_db2");
     addDatabaseSpecificStatement(DB2, "selectFilterByQueryCriteria", "selectFilterByQueryCriteria_oracleDb2");
-    addDatabaseSpecificStatement(DB2, "selectHistoricProcessInstanceIdsByTTLSql", "selectHistoricProcessInstanceIdsByTTLSql_db2");
-    addDatabaseSpecificStatement(DB2, "orderByHistoricProcessIdsForCleanupSql", "orderByHistoricProcessIdsForCleanupSql_db2");
+    addDatabaseSpecificStatement(DB2, "selectHistoricProcessInstanceIdsForCleanup", "selectHistoricProcessInstanceIdsForCleanup_db2");
 
     constants = new HashMap<String, String>();
     constants.put("constant.event", "'event'");
